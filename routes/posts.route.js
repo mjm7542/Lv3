@@ -114,17 +114,16 @@ router.put('/posts/:postId', authMiddleware, async (req, res) => {
         }
         //! 403 게시글을 수정할 권한이 존재하지 않는 경우
         if (nickname !== post.nickname) {
-            
+
             return res
                 .status(403)
                 .json({ errorMessage: "게시글 수정의 권한이 존재하지 않습니다." });
         }
-        
+
         //* 게시물 삭제 부분
         const [updatePostStatus] = await Posts.update(
             { title, content },
             { where: { postId } }
-
         );
         if (updatePostStatus) {
             return res.status(200).json({ message: "게시글을 수정하였습니다" });
@@ -155,7 +154,6 @@ router.delete('/posts/:postId', authMiddleware, async (req, res) => {
                 .status(404)
                 .json({ errorMessage: "게시글이 존재하지 않습니다." });
         }
-
         //! 403 게시글을 삭제할 권한이 존재하지 않는 경우
         if (nickname !== post.nickname) {
             // 현재 로그인된 유저의 아이디와 게시글의 아이디가 불일치 할 경우 수정 권한 없음
@@ -163,10 +161,8 @@ router.delete('/posts/:postId', authMiddleware, async (req, res) => {
                 .status(403)
                 .json({ errorMessage: "게시글의 삭제 권한이 존재하지 않습니다." });
         }
-        await Posts.deleteOne({ _id: _postId });
-
         //! 게시글 삭제에 실패한 경우
-        const deletePostStatus = await Posts.destroy({ where: { postId } });
+        const [deletePostStatus] = await Posts.destroy({ where: { postId } });
         if (deletePostStatus) {
             return res.status(200).json({ message: "게시글을 삭제하였습니다" });
         } else {
