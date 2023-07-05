@@ -120,7 +120,7 @@ router.put('/posts/:postId', authMiddleware, async (req, res) => {
                 .json({ errorMessage: "게시글 수정의 권한이 존재하지 않습니다." });
         }
 
-        //* 게시물 삭제 부분
+        //* 게시물 수정 부분
         const [updatePostStatus] = await Posts.update(
             { title, content },
             { where: { postId } }
